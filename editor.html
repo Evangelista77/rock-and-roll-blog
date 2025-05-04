@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Editor Recensioni - Rock&Roll</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f8f8f8; }
+    h1 { color: #8B0000; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { background: #8B0000; color: white; padding: 10px 20px; border: none; margin-top: 20px; cursor: pointer; }
+    #output { white-space: pre-wrap; background: #fff; padding: 10px; margin-top: 20px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Editor Recensioni</h1>
+  <label for="titolo">Titolo</label>
+  <input type="text" id="titolo" placeholder="Es: Ligabue – Certe notti (live)">
+
+  <label for="immagine">Percorso Immagine</label>
+  <input type="text" id="immagine" placeholder="Es: immagini/ligabue.jpg">
+
+  <label for="data">Data (formato YYYY-MM-DD)</label>
+  <input type="date" id="data">
+
+  <label for="testo">Testo della recensione</label>
+  <textarea id="testo" rows="6" placeholder="Scrivi qui la recensione..."></textarea>
+
+  <button onclick="aggiungiRecensione()">Aggiungi alla lista</button>
+  <button onclick="salvaJSON()">Scarica recensioni.json</button>
+
+  <h2>Anteprima JSON</h2>
+  <div id="output"></div>
+
+  <script>
+    let recensioni = [];
+
+    function aggiungiRecensione() {
+      const titolo = document.getElementById('titolo').value.trim();
+      const immagine = document.getElementById('immagine').value.trim();
+      const data = document.getElementById('data').value.trim();
+      const testo = document.getElementById('testo').value.trim();
+
+      if (!titolo || !immagine || !data || !testo) {
+        alert('Compila tutti i campi.');
+        return;
+      }
+
+      recensioni.push({ titolo, immagine, data, testo });
+      document.getElementById('output').textContent = JSON.stringify(recensioni, null, 2);
+
+      document.getElementById('titolo').value = '';
+      document.getElementById('immagine').value = '';
+      document.getElementById('data').value = '';
+      document.getElementById('testo').value = '';
+    }
+
+    function salvaJSON() {
+      const blob = new Blob([JSON.stringify(recensioni, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'recensioni.json';
+      link.click();
+    }
+  </script>
+</body>
+</html>

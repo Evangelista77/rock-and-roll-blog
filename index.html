@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rock&Roll</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #fff; margin: 0; padding: 0; }
+    header { background: #8B0000; color: #fff; padding: 20px; display: flex; align-items: center; }
+    header img.logo { height: 60px; margin-right: 20px; }
+    .container { max-width: 900px; margin: 20px auto; padding: 20px; background: white; }
+    .article { margin-bottom: 40px; }
+    .article img { width: 100%; max-width: 800px; margin: 10px 0; }
+    .article h2 { color: #8B0000; margin-bottom: 5px; }
+    .article small { color: #888; display: block; margin-bottom: 10px; }
+    .article p { color: #333; line-height: 1.6; }
+    footer { background: #000; color: white; text-align: center; padding: 15px; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="rock_logo_vector.png" class="logo" alt="Logo">
+    <div>
+      <h1>Rock&Roll</h1>
+      <p>Recensioni di musica italiana rock, pop e cantautorale</p>
+    </div>
+  </header>
+
+  <div class="container" id="contenuto"></div>
+
+  <footer>&copy; 2025 Rock&Roll - Tutti i diritti riservati</footer>
+
+  <script>
+    fetch("recensioni.json")
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("contenuto");
+
+        // Ordina per data (dal più recente)
+        data.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+        data.forEach(recensione => {
+          const art = document.createElement("div");
+          art.className = "article";
+          art.innerHTML = `<h2>${recensione.titolo}</h2>
+                           <small>${recensione.data}</small>
+                           <img src='${recensione.immagine}' alt='${recensione.titolo}'>
+                           <p>${recensione.testo}</p>`;
+          container.appendChild(art);
+        });
+      });
+  </script>
+</body>
+</html>
